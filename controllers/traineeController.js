@@ -1,8 +1,14 @@
 const Users = require("../models/users");
 const mongoose = require("mongoose");
 const updateProfile = async (req, res) => {
-  const { gender, number, age, location } = req.body;
-  if (gender?.trim() && number?.trim() && age?.trim() && location?.trim()) {
+  const { gender, number, age, location, photoUrl } = req.body;
+  if (
+    gender?.trim() &&
+    number?.trim() &&
+    age?.trim() &&
+    location?.trim() &&
+    photoUrl?.trim()
+  ) {
     try {
       const user = await Users.findById(req.userInfo._id);
       if (!user)
@@ -16,6 +22,7 @@ const updateProfile = async (req, res) => {
       user.profile.number = parseInt(number);
       user.profile.age = parseInt(age);
       user.profile.location = location;
+      user.profile.photo = photoUrl;
       await user.save();
       return res.send({
         success: true,
