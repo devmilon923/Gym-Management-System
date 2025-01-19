@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const authRoute = require("./routes/authRoutes");
 const accountRoute = require("./routes/accountRoutes");
+const adminRoute = require("./routes/adminRoutes");
 const traineeRoute = require("./routes/traineeRoutes");
 const uploadProfile = require("./middlewares/uploadProfle");
 const errorHandler = require("./middlewares/errorHandler");
@@ -30,7 +31,10 @@ mongoose
 app.use("/auth", authRoute);
 // Trainee route:
 app.use("/trainee", traineeRoute);
+// Account route:
 app.use("/account", accountRoute);
+// Admin route:
+app.use("/admin", adminRoute);
 app.use(errorHandler);
 app.listen(process.env.port || 4000, () =>
   console.log(`Server running on port ${process.env.port || 4000}`)
