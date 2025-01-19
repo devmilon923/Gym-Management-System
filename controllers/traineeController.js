@@ -1,3 +1,4 @@
+const RoleRequestDB = require("../models/roleRequestSchema");
 const Users = require("../models/users");
 const mongoose = require("mongoose");
 const updateProfile = async (req, res) => {
@@ -58,6 +59,7 @@ const profile = async (req, res) => {
           name: 1,
           email: 1,
           profile: 1,
+          role: 1,
           createAt: 1,
         },
       },
@@ -69,5 +71,52 @@ const profile = async (req, res) => {
     res.send(error);
   }
 };
+const traineeRequest = async (req, res) => {
+  const noteRegex = /^[a-zA-Z\s]{15,}$/;
 
-module.exports = { updateProfile, profile };
+  if (!req.body?.note?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "Note must be required",
+    });
+  if (!noteRegex.test(req.body?.note?.trim()))
+    return res.status(400).send({
+      success: false,
+      message: "Validation error occurred",
+      errorDetails: {
+        field: "note",
+        message:
+          "Note has at least 15 alphabetic characters and optional spaces",
+      },
+    });
+  if (req.userInfo?.isVerifyed && req.userInfo?.role === "Trainee")
+    return res.send({
+      success: false,
+      statusCode: 400,
+      message: `You already be a verifyed Trainee`,
+    });
+  const checkRequst = await RoleRequestDB.findOne({
+    user: req.userInfo._id,
+    requestedRole: "Trainee",
+    status: "Pending",
+  });
+  if (checkRequst)
+    return res.send({
+      success: false,
+      statusCode: 400,
+      message: `You already submitted a trainee request`,
+      errorDetails:
+        "Before your current request Rejected or Accepted you can't make another request",
+    });
+  await RoleRequestDB.create({
+    user: req.userInfo._id,
+    note: req.body?.note?.trim(),
+    requestedRole: "Trainee",
+  });
+  return res.send({
+    success: true,
+    statusCode: 201,
+    message: `Trainee request submitted`,
+  });
+};
+module.exports = { updateProfile, profile, traineeRequest };

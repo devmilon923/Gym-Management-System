@@ -27,3 +27,4 @@ const requestSchema = mongoose.Schema(
 );
 
 const RoleRequestDB = mongoose.model("roleRequestDB", requestSchema);
+module.exports = RoleRequestDB;
