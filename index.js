@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const userRoute = require("./routes/authRoutes");
+const authRoute = require("./routes/authRoutes");
+const traineeRoute = require("./routes/traineeRoutes");
 const uploadProfile = require("./middlewares/uploadProfle");
 const errorHandler = require("./middlewares/errorHandler");
 const { default: mongoose } = require("mongoose");
@@ -25,7 +26,9 @@ mongoose
   .catch((err) => console.log(err.message));
 
 // Auth route:
-app.use("/auth", userRoute);
+app.use("/auth", authRoute);
+// Trainee route:
+app.use("/trainee", traineeRoute);
 
 app.use(errorHandler);
 app.listen(process.env.port || 4000, () =>
