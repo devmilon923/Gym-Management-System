@@ -1,4 +1,6 @@
+const ClassDB = require("../models/classSchema");
 const RoleRequestDB = require("../models/roleRequestSchema");
+const Users = require("../models/users");
 
 const viewRequest = async (req, res) => {
   try {
@@ -73,5 +75,48 @@ const viewOneRequest = async (req, res) => {
   });
   res.send(request || []);
 };
+const addClasses = async (req, res) => {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0); // Set to the start of the day
 
-module.exports = { viewRequest, updateRequest, viewOneRequest };
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999); // Set to the end of the day
+
+  const todayAddedClasses = await ClassDB.find({
+    createdAt: {
+      $gte: startOfToday,
+      $lt: endOfToday,
+    },
+  });
+  console.log(todayAddedClasses.length);
+  if (todayAddedClasses.length >= 5)
+    return res.status(400).send({
+      success: false,
+      message: "Max 5 classes create in singel day",
+    });
+
+  const user = await Users.findOne({
+    _id: req.body?.trainer,
+    role: "Trainer",
+  });
+  if (!user)
+    return res.status(400).send({
+      success: false,
+      message: "Invalid trainer",
+    });
+  if (!req.body?.startTime?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "start time required",
+    });
+  let startTime = new Date(req.body?.startTime); // Current date and time
+  let endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours to var1
+  const addClass = await ClassDB.create({
+    title: req.body.title,
+    startTime: startTime,
+    endTime: endTime,
+    trainer: req.body?.trainer,
+  });
+  res.send(addClass);
+};
+module.exports = { viewRequest, updateRequest, viewOneRequest, addClasses };

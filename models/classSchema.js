@@ -35,3 +35,4 @@ const classSchema = mongoose.Schema(
   { timestamps: true }
 );
 const ClassDB = mongoose.model("classDB", classSchema);
+module.exports = ClassDB;
