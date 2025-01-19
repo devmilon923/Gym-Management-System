@@ -65,5 +65,13 @@ const updateRequest = async (req, res) => {
     });
   }
 };
+const viewOneRequest = async (req, res) => {
+  const requestID = req.params.id;
+  const request = await RoleRequestDB.findById(requestID).populate({
+    path: "user",
+    select: "name email role isVerifyed _id createdAt profile",
+  });
+  res.send(request || []);
+};
 
-module.exports = { viewRequest, updateRequest };
+module.exports = { viewRequest, updateRequest, viewOneRequest };
