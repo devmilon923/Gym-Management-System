@@ -1,4 +1,6 @@
 const Users = require("../models/users");
+const checkHashPassword = require("../services/checkHashPassword");
+const createJWT = require("../services/createJWT");
 const createHash = require("../services/createPasswordHash");
 
 const register = async (req, res) => {
@@ -70,14 +72,70 @@ const register = async (req, res) => {
       Data: data,
     });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return res.send({
       success: false,
       statusCode: 400,
       message: error.message,
-      Data: {},
     });
   }
 };
 
-module.exports = { register };
+const login = async (req, res) => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (!req.body?.email?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "Email must be required",
+    });
+  if (!emailRegex.test(req.body?.email.trim()))
+    return res.status(400).send({
+      success: false,
+      message: "Validation error occurred",
+      errorDetails: {
+        field: "email",
+        message: "Invalid email format",
+      },
+    });
+
+  try {
+    const user = await Users.findOne({ email: req.body?.email });
+    if (!user)
+      return res.send({
+        success: false,
+        statusCode: 404,
+        message: "Invalid credentials",
+      });
+
+    const checkPassword = await checkHashPassword(
+      req.body?.password,
+      user.password
+    );
+    if (!checkPassword)
+      return res.send({
+        success: false,
+        statusCode: 404,
+        message: "Invalid credentials",
+      });
+
+    const { password, profile, __v, updatedAt, ...data } = user.toObject();
+    const token = await createJWT(data);
+    res.status(201);
+    return res.send({
+      success: true,
+      statusCode: 201,
+      message: "User login successfully",
+      Data: { ...data, token: token },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.send({
+      success: false,
+      statusCode: 400,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { register, login };
