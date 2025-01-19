@@ -20,3 +20,4 @@ const bookingSchema = mongoose.Schema(
 );
 
 const BookingDB = mongoose.model("bookingDB", bookingSchema);
+module.exports = BookingDB;
