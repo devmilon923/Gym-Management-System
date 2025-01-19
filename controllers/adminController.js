@@ -1,5 +1,4 @@
 const RoleRequestDB = require("../models/roleRequestSchema");
-const Users = require("../models/users");
 
 const viewRequest = async (req, res) => {
   try {
