@@ -66,8 +66,8 @@ Key features include:
 - **Request Body**:
   ```json
   {
-    "email": "admin@gmail.com",
-    "password": "Admin@3333"
+    "email": "example@gmail.com",
+    "password": "Example@111"
   }
   ```
 - **Response**:
@@ -363,8 +363,8 @@ Key features include:
 
 ## Admin Credentials
 
-- **Email**: [admin@example.com](mailto:admin@example.com)
-- **Password**: admin123
+- **Email**: [admin@gmail.com](mailto:admin@gmail.com)
+- **Password**: Admin@3333
 
 ## Instructions to Run Locally
 
