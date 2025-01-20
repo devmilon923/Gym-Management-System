@@ -17,7 +17,7 @@ Key features include:
 
 ## Relational Diagram
 
-[Link to Relational Diagram](#) _(Replace with actual link or embed the image)_
+[Link to Relational Diagram](https://drive.google.com/file/d/15aSjCTvmEKsSh-EMO3U2L0gQ0DeTjBCS/view?usp=sharing)
 
 ## Technology Stack
 
