@@ -5,6 +5,7 @@ const authRoute = require("./routes/authRoutes");
 const accountRoute = require("./routes/accountRoutes");
 const adminRoute = require("./routes/adminRoutes");
 const traineeRoute = require("./routes/traineeRoutes");
+const trainerRoute = require("./routes/trainerRoutes");
 const uploadProfile = require("./middlewares/uploadProfle");
 const errorHandler = require("./middlewares/errorHandler");
 const { default: mongoose } = require("mongoose");
@@ -31,6 +32,8 @@ mongoose
 app.use("/auth", authRoute);
 // Trainee route:
 app.use("/trainee", traineeRoute);
+// Trainer route:
+app.use("/trainer", trainerRoute);
 // Account route:
 app.use("/account", accountRoute);
 // Admin route:

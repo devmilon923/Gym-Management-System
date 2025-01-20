@@ -91,6 +91,12 @@ const traineeRequest = async (req, res) => {
           "Note has at least 15 alphabetic characters and optional spaces",
       },
     });
+  if (req.userInfo?.role === "Admin")
+    return res.send({
+      success: false,
+      statusCode: 400,
+      message: `Admin are not allowed to create any Trainee request`,
+    });
   if (req.userInfo?.isVerifyed && req.userInfo?.role === "Trainee")
     return res.send({
       success: false,
