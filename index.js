@@ -16,7 +16,7 @@ app.use(
   "/images/profile",
   express.static(path.join(__dirname, "images/profile"))
 );
-// Before resgitation or profile update use this route and genate an image url
+// Before resgitation or profile update use this route and genarate an image url
 app.post("/upload-profile", uploadProfile.single("image"), (req, res) => {
   res.send({
     url: `${process.env.server_url}/images/profile/${req.file.filename}`,
@@ -28,6 +28,8 @@ mongoose
   .then(() => console.log("Database connected"))
   .catch((err) => console.log(err.message));
 
+// Public route:
+app.get("/", (req, res) => res.send("Server is live"));
 // Auth route:
 app.use("/auth", authRoute);
 // Trainee route:

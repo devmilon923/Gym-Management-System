@@ -378,7 +378,7 @@ Key features include:
    npm install
    ```
 3. **Set Environment Variables**:
-   Create a `.env` file with the following env.sample:
+   Create a `.env` file with the following `.env.sample`:
    ```
     server_url='APP URL'
     mongodbURI='MongoDBURI'
@@ -393,7 +393,7 @@ Key features include:
 
 ## Live Hosting Link
 
-[Live Application Link](#) _(Replace with actual link)_
+[Live Application Link](https://gym-management-system-henna.vercel.app/)
 
 ## Testing Instructions
 
