@@ -21,10 +21,10 @@ Key features include:
 
 ## Technology Stack
 
-- **Programming Language**: TypeScript/Python
-- **Web Framework**: Express.js/Django
-- **ORM/ODM**: Mongoose/Prisma
-- **Database**: MongoDB/PostgreSQL
+- **Programming Language**: JavaScript
+- **Web Framework**: Express.js
+- **ORM/ODM**: Mongoose
+- **Database**: MongoDB
 - **Authentication**: JSON Web Tokens (JWT)
 
 ## API Endpoints
@@ -47,7 +47,16 @@ Key features include:
   ```json
   {
     "success": true,
-    "message": "User registered successfully."
+    "statusCode": 201,
+    "message": "User created successfully",
+    "Data": {
+      "name": "Name",
+      "email": "email@gmail.com",
+      "role": "Trainee",
+      "isVerifyed": false,
+      "_id": "678dc931b680********",
+      "createdAt": "2025-01-20T03:55:29.691Z"
+    }
   }
   ```
 
@@ -57,21 +66,31 @@ Key features include:
 - **Request Body**:
   ```json
   {
-    "email": "john@example.com",
-    "password": "password123"
+    "email": "admin@gmail.com",
+    "password": "Admin@3333"
   }
   ```
 - **Response**:
   ```json
   {
     "success": true,
-    "token": "<JWT_TOKEN>"
+    "statusCode": 201,
+    "message": "User login successfully",
+    "Data": {
+      "_id": "678e2b67**********",
+      "name": "admin",
+      "email": "email@gmail.com",
+      "role": "Trainee",
+      "isVerifyed": false,
+      "createdAt": "2025-01-20T10:54:31.348Z",
+      "token": "eyJhbGciOiJIUzI1NiIs*********"
+    }
   }
   ```
 
 ### Admin
 
-#### `POST /admin/schedule`
+#### `POST /admin/add-classes`
 
 - **Description**: Create a new class schedule.
 - **Request Body**:
@@ -86,6 +105,8 @@ Key features include:
   ```json
   {
     "success": true,
+    "success": true,
+    "statusCode": 201,
     "message": "Class schedule created successfully."
   }
   ```
