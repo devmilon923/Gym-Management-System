@@ -47,6 +47,24 @@ const bookClasses = async (req, res) => {
       });
     }
 
+    // Check if the class is already full
+    if (classDB.trainees.length >= 10) {
+      return res.status(400).send({
+        success: false,
+        statusCode: 400,
+        message: "Class is already full. No more bookings are allowed.",
+      });
+    }
+
+    // Check if the user is already enrolled in this class
+    if (classDB.trainees.includes(req.userInfo._id)) {
+      return res.status(400).send({
+        success: false,
+        statusCode: 400,
+        message: "You are already enrolled in this class.",
+      });
+    }
+
     const { startTime: requestedStartTime, endTime: requestedEndTime } =
       classDB;
 
@@ -74,7 +92,11 @@ const bookClasses = async (req, res) => {
       });
     }
 
-    // Create a new booking if no overlap
+    // Add trainee to the class trainees array
+    classDB.trainees.push(req.userInfo._id);
+    await classDB.save();
+
+    // Create a new booking
     const booking = await BookingDB.create({
       classDB: classID,
       trainee: req.userInfo._id,
@@ -91,9 +113,57 @@ const bookClasses = async (req, res) => {
       success: false,
       statusCode: 500,
       message: "Server error",
-      error: error.message,
+      errorDetails: error.message,
     });
   }
 };
+const cancelBooking = async (req, res) => {
+  const bookingID = req.params?.id;
 
-module.exports = { activeClasses, bookClasses };
+  try {
+    // Find the booking by ID
+    const booking = await BookingDB.findById(bookingID);
+    if (!booking) {
+      return res.status(404).send({
+        success: false,
+        statusCode: 404,
+        message: "Booking not found",
+      });
+    }
+
+    // Find the class associated with the booking
+    const classDB = await ClassDB.findById(booking.classDB);
+    if (!classDB) {
+      return res.status(404).send({
+        success: false,
+        statusCode: 404,
+        message: "Class not found for this booking",
+      });
+    }
+
+    // Remove the trainee from the classDB's trainees array
+    classDB.trainees = classDB.trainees.filter(
+      (traineeId) => traineeId.toString() !== req.userInfo._id.toString()
+    );
+    await classDB.save();
+
+    // Update the booking status to false (canceled)
+    booking.status = false;
+    await booking.save();
+
+    res.status(200).send({
+      success: true,
+      statusCode: 200,
+      message: "Booking canceled successfully",
+      Data: booking,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      statusCode: 500,
+      message: "Server error",
+      errorDetails: error.message,
+    });
+  }
+};
+module.exports = { activeClasses, bookClasses, cancelBooking };

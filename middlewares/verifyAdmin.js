@@ -15,7 +15,8 @@ const verifyAdmin = async (req, res, next) => {
         success: false,
         statusCode: 401,
         message: "Unauthorized access",
-        errorDetails: "You don't have any permisson to access this route",
+        errorDetails:
+          "You don't have any permisson to access this route if you think your are admin please logout and login again to make sure you have active access token",
       });
     const { token, createdAt, ...data } = decodedData;
     req.userInfo = data;

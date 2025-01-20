@@ -73,9 +73,50 @@ const viewOneRequest = async (req, res) => {
     path: "user",
     select: "name email role isVerifyed _id createdAt profile",
   });
+
   res.send(request || []);
 };
 const addClasses = async (req, res) => {
+  const nameRegex = /^[a-zA-Z\s]{15,}$/;
+  if (!req.body?.title?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "Title must be required",
+    });
+  if (!nameRegex.test(req.body?.title.trim()))
+    return res.status(400).send({
+      success: false,
+      message: "Validation error occurred",
+      errorDetails: {
+        field: "title",
+        message:
+          "Title has at least 15 alphabetic characters and optional spaces",
+      },
+    });
+
+  const iso8601Regex =
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{2}:\d{2}$/;
+  if (!req.body?.trainer?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "Trainer id must be required",
+    });
+  if (!req.body?.startTime?.trim())
+    return res.status(400).send({
+      success: false,
+      message: "Start Time must be required",
+    });
+  if (!iso8601Regex.test(req.body?.startTime?.trim()))
+    return res.status(400).send({
+      success: false,
+      message: "Validation error occurred",
+      errorDetails: {
+        field: "startTime",
+        message:
+          "Make sure client's input matches the required format (YYYY-MM-DDTHH:mm:ss.sss±HH:MM)",
+      },
+    });
+
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0); // Set to the start of the day
 
@@ -88,7 +129,6 @@ const addClasses = async (req, res) => {
       $lt: endOfToday,
     },
   });
-  console.log(todayAddedClasses.length);
   if (todayAddedClasses.length >= 5)
     return res.status(400).send({
       success: false,
@@ -103,20 +143,22 @@ const addClasses = async (req, res) => {
     return res.status(400).send({
       success: false,
       message: "Invalid trainer",
+      errorDetails: "Make sure trainer matches role 'Trainer'",
     });
-  if (!req.body?.startTime?.trim())
-    return res.status(400).send({
-      success: false,
-      message: "start time required",
-    });
+
   let startTime = new Date(req.body?.startTime); // Current date and time
   let endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours to var1
   const addClass = await ClassDB.create({
-    title: req.body.title,
+    title: req.body?.title?.trim(),
     startTime: startTime,
     endTime: endTime,
-    trainer: req.body?.trainer,
+    trainer: req.body?.trainer?.trim(),
   });
-  res.send(addClass);
+  res.status(201).send({
+    success: true,
+    statusCode: 201,
+    message: "Class added successfully",
+    class: addClass,
+  });
 };
 module.exports = { viewRequest, updateRequest, viewOneRequest, addClasses };
