@@ -90,11 +90,164 @@ Key features include:
   }
   ```
 
+#### `GET /admin/view-request`
+
+- **Description**: View all requests.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "requestId": "id",
+        "details": "Request details."
+      }
+    ]
+  }
+  ```
+
+#### `GET /admin/update-request/:id`
+
+- **Description**: Update a specific request.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Request updated successfully."
+  }
+  ```
+
+#### `GET /admin/view-request/:id`
+
+- **Description**: View details of a specific request.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "requestId": "id",
+      "details": "Request details."
+    }
+  }
+  ```
+
+#### `POST /admin/add-classes`
+
+- **Description**: Add new classes.
+- **Request Body**:
+  ```json
+  {
+    "trainerId": "trainer_id",
+    "startTime": "2025-01-20T10:00:00.000Z",
+    "endTime": "2025-01-20T12:00:00.000Z"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Class added successfully."
+  }
+  ```
+
+### Trainer
+
+#### `GET /trainer/active-classes`
+
+- **Description**: Get a list of active classes assigned to the trainer.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "classId": "id",
+        "startTime": "2025-01-20T10:00:00.000Z",
+        "endTime": "2025-01-20T12:00:00.000Z"
+      }
+    ]
+  }
+  ```
+
+### Account
+
+#### `GET /account/profile`
+
+- **Description**: View user profile.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "trainee"
+    }
+  }
+  ```
+
+#### `POST /account/update-profile`
+
+- **Description**: Update user profile.
+- **Request Body**:
+  ```json
+  {
+    "name": "John Doe Updated",
+    "email": "john.updated@example.com"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Profile updated successfully."
+  }
+  ```
+
+#### `POST /account/trainee-request`
+
+- **Description**: Submit a trainee request.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Request submitted successfully."
+  }
+  ```
+
+#### `POST /account/trainer-request`
+
+- **Description**: Submit a trainer request.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Request submitted successfully."
+  }
+  ```
+
 ### Trainee
 
-#### `POST /trainee/book/:classId`
+#### `GET /trainee/active-classes`
 
-- **Description**: Book a class schedule.
+- **Description**: Get a list of active classes available for booking.
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "classId": "id",
+        "startTime": "2025-01-20T10:00:00.000Z",
+        "endTime": "2025-01-20T12:00:00.000Z"
+      }
+    ]
+  }
+  ```
+
+#### `GET /trainee/book-classes/:id`
+
+- **Description**: Book a class by ID.
 - **Response**:
   ```json
   {
@@ -103,9 +256,9 @@ Key features include:
   }
   ```
 
-#### `DELETE /trainee/cancel/:bookingId`
+#### `GET /trainee/cancel-booking/:id`
 
-- **Description**: Cancel a booking.
+- **Description**: Cancel a booking by ID.
 - **Response**:
   ```json
   {
@@ -204,10 +357,10 @@ Key features include:
    npm install
    ```
 3. **Set Environment Variables**:
-   Create a `.env` file with the following:
-   ```env
-   DATABASE_URI=<Your MongoDB/PostgreSQL Connection String>
-   JWT_SECRET=<Your JWT Secret>
+   Create a `.env` file with the following env.sample:
+   ```server_url='APP URL'
+      mongodbURI='MongoDBURI'
+      jwtKey='jwtPrivate'
    ```
 4. **Start the Server**:
    ```bash
