@@ -213,8 +213,10 @@ Key features include:
 - **Request Body**:
   ```json
   {
-    "name": "John Doe Updated",
-    "email": "john.updated@example.com"
+    "gender": "Male",
+    "age": 00,
+    "location": "2000,location,Country",
+    "photo": "PhotoURL"
   }
   ```
 - **Response**:
@@ -404,4 +406,4 @@ Key features include:
 
 ---
 
-This README provides all the essential details for understanding, running, and testing the project. Ensure all live links and credentials are updated before sub
+This README provides all the essential details for understanding, running, and testing the project.
