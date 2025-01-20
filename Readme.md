@@ -349,7 +349,7 @@ Key features include:
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/devmilon923/Gym-Management-System.git
    cd <repository-folder>
    ```
 2. **Install Dependencies**:
