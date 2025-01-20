@@ -379,7 +379,8 @@ Key features include:
    ```
 3. **Set Environment Variables**:
    Create a `.env` file with the following env.sample:
-   ```server_url='APP URL'
+   ```
+   server_url='APP URL'
       mongodbURI='MongoDBURI'
       jwtKey='jwtPrivate'
    ```
